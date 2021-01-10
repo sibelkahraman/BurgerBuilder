@@ -40,7 +40,7 @@ class BurgerBuilder extends Component {
                        })
                        .catch(error => {
                           this.setState({
-                              error:true
+                              error:false
                           })
                       }
                           
