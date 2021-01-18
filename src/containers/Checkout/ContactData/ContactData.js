@@ -3,17 +3,58 @@ import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.css';
 import axiosInstance from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
+
 
 class ContactData extends Component{
     state = {
-        name: '',
-        email: '',
-        address:{
-            street: '',
-            postalCode: ''
+        orderFrom:{
+            name: {
+                elementType:'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Name'
+                },
+                value: ''
+            },
+            email: {
+                elementType:'input',
+                elementConfig: {
+                    type: 'email',
+                    placeholder: 'Your E-Mail'
+                },
+                value: ''
+            },
+            street: {
+                elementType:'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Street'
+                },
+                value: ''
+            },
+            postalCode: {
+                elementType:'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'ZIP Code'
+                },
+                value: ''
+            },
+            deliveryType:{
+                elementType:'select',
+                elementConfig: {
+                    options: [
+                        {value: 'fastest', displayValue: 'Fastest'},
+                        {value: 'cheapest', displayValue: 'Cheapest'}
+                    ]
+                },
+                value: ''
+            }
         },
         price:0,
         loading:false
+        
     }
 
     orderHandler = (event) =>{
@@ -52,11 +93,21 @@ class ContactData extends Component{
 
 
     render(){
+        const formElementsArray = [];
+        for (let key in this.state.orderFrom){
+            formElementsArray.push({
+                id:key,
+                config:this.state.orderFrom[key]}
+            )
+        }
         let form = (<form>
-            <input className={classes.Input} type='text' name='name' placeholder='Your Name'/>
-            <input className={classes.Input} type='email' name='email' placeholder='Your Mail'/>
-            <input className={classes.Input} type='text' name='street' placeholder='Your Street'/>
-            <input className={classes.Input} type='text' name='postalCode' placeholder='Your PostalCode'/>
+            {formElementsArray.map(formElement => (
+                <Input 
+                    key= {formElement.id}
+                    elementType={formElement.config.elementType}
+                    elementConfig={formElement.config.elementConfig}
+                    value={formElement.config.value} />
+            ))}
             <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
         </form>);
         if (this.state.loading){
