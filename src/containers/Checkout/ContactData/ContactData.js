@@ -8,7 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component{
     state = {
-        orderFrom:{
+        orderForm:{
             name: {
                 elementType:'input',
                 elementConfig: {
@@ -91,13 +91,23 @@ class ContactData extends Component{
             });
     }
 
+    inputChangedHandler(event, inputIdentifier){
+        const updatedOrderForm = {...this.state.orderForm};
+        const updatedOrderElement = {...updatedOrderForm[inputIdentifier]}
+        updatedOrderElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedOrderElement;
+        this.setState({
+            orderForm: updatedOrderForm
+        })
+    }
+
 
     render(){
         const formElementsArray = [];
-        for (let key in this.state.orderFrom){
+        for (let key in this.state.orderForm){
             formElementsArray.push({
                 id:key,
-                config:this.state.orderFrom[key]}
+                config:this.state.orderForm[key]}
             )
         }
         let form = (<form>
@@ -106,7 +116,8 @@ class ContactData extends Component{
                     key= {formElement.id}
                     elementType={formElement.config.elementType}
                     elementConfig={formElement.config.elementConfig}
-                    value={formElement.config.value} />
+                    value={formElement.config.value} 
+                    changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
             ))}
             <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
         </form>);
